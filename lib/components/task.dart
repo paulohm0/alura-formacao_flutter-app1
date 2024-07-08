@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'difficult.dart';
 
-class Tasks extends StatefulWidget {
+class Task extends StatefulWidget {
   final String nome;
   final String imagem;
   final int dificuldade;
-  const Tasks(this.nome, this.imagem, this.dificuldade, {super.key});
+  Task(this.nome, this.imagem, this.dificuldade, {super.key});
 
-  @override
-  State<Tasks> createState() => _TasksState();
-}
-
-class _TasksState extends State<Tasks> {
   int nivel = 0;
 
+  @override
+  State<Task> createState() => _TaskState();
+}
+
+class _TaskState extends State<Task> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -81,7 +81,7 @@ class _TasksState extends State<Tasks> {
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              nivel++;
+                              widget.nivel++;
                             });
                           },
                           style: ElevatedButton.styleFrom(
@@ -121,7 +121,7 @@ class _TasksState extends State<Tasks> {
                       width: 200,
                       child: LinearProgressIndicator(
                         color: Colors.white,
-                        value: (nivel / widget.dificuldade) / 10,
+                        value: (widget.nivel / widget.dificuldade) / 10,
                       ),
                     ),
                   ),
@@ -132,7 +132,9 @@ class _TasksState extends State<Tasks> {
                       top: 8,
                     ),
                     child: Text(
-                      nivel < 10 * widget.dificuldade ? 'Nivel: $nivel' : 'MAX',
+                      widget.nivel < 10 * widget.dificuldade
+                          ? 'Nivel: ${widget.nivel}'
+                          : 'MAX',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),

@@ -1,9 +1,9 @@
+import 'package:alura/data/task_inherited.dart';
+import 'package:alura/screens/initial_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/initial_screen.dart';
-
 void main() {
-  runApp(const MyApp());
+  runApp(TaskInherited(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const InitialScreen(),
+      home: TaskInherited(child: const InitialScreen()),
     );
   }
 }
