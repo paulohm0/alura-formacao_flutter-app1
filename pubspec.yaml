@@ -25,13 +25,13 @@ flutter_lints: ^3.0.0
 flutter:
   assets:
     - assets/nophoto.jpg
-    - assets/splash.png
+    - assets/splashscreen.png
 
   uses-material-design: true
 
 flutter_native_splash:
   color: "#2196F3"
-  image: assets/splash.png
+  image: assets/splashscreen.png
   android_12:
-    image: assets/splash.png
+    image: assets/splashscreen.png
     color: "#2196F3"
