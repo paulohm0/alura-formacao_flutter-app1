@@ -1,16 +1,17 @@
-# alura
+# <p align="center"> Aplicativo de Tarefas
+Este projeto é um aplicativo de gerenciamento de tarefas. Com ele, você pode adicionar novas tarefas, visualizar a lista de tarefas existentes e acompanhar o progresso de cada uma.
+<p align="center">
 
-Flutter project
+    ✅ O foco ao criar esse app foi estudar e exercitar: 
+      - construção de tela, 
+      - criação de formulário com validações para os campos,
+      - navegação e rotas,
+      - gerenciamento de estado com Inherited Widget,
+      - tratamento de imagem.
+      
+## 📱 Imagens
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p float="left">
+<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWRmbHcyODN5ZXduNDVkaTdtYnEyanJkc2xoNmp2aHB1bjI1d3U0eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yeXzbqozLdSo68qRBD/giphy.gif" alt="Tela do App" width="300"/>
+<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWk1ZWJsODhwdzEwYWFnOXk1dGd0M3g3MWtqZXFzNzhocmJ2MThlNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/bK1KLS1zvK4Tb1XRSn/giphy.gif" alt="Tela do App" width="300"/>
+</p>
