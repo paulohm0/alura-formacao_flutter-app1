@@ -1,12 +1,16 @@
+import 'dart:ui';
+
+import 'package:alura/data/task_dao.dart';
 import 'package:flutter/material.dart';
 
-import 'difficult.dart';
+import '../screens/new_task_screen.dart';
 
 class Task extends StatefulWidget {
   final String nome;
   final String imagem;
-  final int dificuldade;
-  Task(this.nome, this.imagem, this.dificuldade, {super.key});
+  final VoidCallback onDelete;
+
+  Task(this.nome, this.imagem, {required this.onDelete, super.key});
 
   int nivel = 0;
 
@@ -26,7 +30,7 @@ class _TaskState extends State<Task> {
               borderRadius: BorderRadius.circular(4),
               color: Colors.blue,
             ),
-            height: 140,
+            height: 105,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,6 +39,11 @@ class _TaskState extends State<Task> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
                   color: Colors.white,
+                  border: Border(
+                    top: BorderSide(color: Colors.blue, width: 1.0),
+                    left: BorderSide(color: Colors.blue, width: 1.0),
+                    right: BorderSide(color: Colors.blue, width: 1.0),
+                  ),
                 ),
                 height: 100,
                 child: Row(
@@ -67,79 +76,128 @@ class _TaskState extends State<Task> {
                             style: const TextStyle(
                                 fontSize: 24, overflow: TextOverflow.ellipsis),
                           ),
-                          Difficult(
-                            dificuldade: widget.dificuldade,
-                          ),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: SizedBox(
-                        height: 60,
-                        width: 60,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              widget.nivel++;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      padding: const EdgeInsets.only(
+                          top: 2.0, right: 5.0, bottom: 1.0),
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NewTaskScreen(
+                                    taskContext: context,
+                                    task: Task(
+                                      widget.nome,
+                                      widget.imagem,
+                                      onDelete: widget.onDelete,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.zero,
                             ),
-                            padding: EdgeInsets.zero,
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.mode_edit_outline,
+                                  size: 24,
+                                ),
+                                Text(
+                                  'Editar',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.arrow_drop_up,
-                                size: 24,
+                          ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return BackdropFilter(
+                                    // widget para deixar o fundo do alertDialog com blur
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 5.0, sigmaY: 5.0),
+                                    child: AlertDialog(
+                                      content: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              'Você quer excluir a tarefa ?',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    TaskDao()
+                                                        .delete(widget.nome);
+                                                    widget.onDelete();
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Icon(Icons.check),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Icon(Icons.close),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              Text(
-                                'UP',
-                                style: TextStyle(fontSize: 10),
-                              ),
-                            ],
+                              padding: EdgeInsets.zero,
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.delete_forever,
+                                  size: 24,
+                                ),
+                                Text(
+                                  'Delete',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     )
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 8,
-                    ),
-                    child: SizedBox(
-                      width: 200,
-                      child: LinearProgressIndicator(
-                        color: Colors.white,
-                        value: (widget.nivel / widget.dificuldade) / 10,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 20,
-                      bottom: 8,
-                      top: 8,
-                    ),
-                    child: Text(
-                      widget.nivel < 10 * widget.dificuldade
-                          ? 'Nivel: ${widget.nivel}'
-                          : 'MAX',
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         ],
