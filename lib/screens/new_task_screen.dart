@@ -1,47 +1,52 @@
-import 'package:alura/components/task.dart';
-import 'package:alura/data/task_dao.dart';
+import 'dart:io';
+
+import 'package:alura/components/task_model.dart';
+import 'package:alura/data/database.dart';
 import 'package:flutter/material.dart';
 
-class NewTaskScreen extends StatefulWidget {
-  const NewTaskScreen({super.key, required this.taskContext, this.task});
+class NewTaskWidget extends StatefulWidget {
+  const NewTaskWidget({
+    super.key,
+    required this.taskContext,
+    this.task,
+  });
 
   final BuildContext taskContext;
-  final Task? task;
+  final TaskModel? task;
 
   @override
-  State<NewTaskScreen> createState() => _NewTaskScreenState();
+  State<NewTaskWidget> createState() => _NewTaskWidgetState();
 }
 
-class _NewTaskScreenState extends State<NewTaskScreen> {
+class _NewTaskWidgetState extends State<NewTaskWidget> {
   late TextEditingController nameController;
   late TextEditingController imageController;
 
   final _formKey = GlobalKey<FormState>();
+  late Future<bool> imageExists;
 
   @override
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.task?.nome ?? '');
     imageController = TextEditingController(text: widget.task?.imagem ?? '');
-  }
-
-  void formValidator() {
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-      setState(() {});
-    }
+    imageExists = checkImage(imageController.text);
   }
 
   bool valueValidator(String? value) {
     return value != null && value.isNotEmpty;
   }
 
-  bool difficultyValidator(String? value) {
-    if (value != null && value.isNotEmpty) {
-      if (int.parse(value) > 0 && int.parse(value) < 6) {
-        return true;
-      }
+  Future<bool> checkImage(String url) async {
+    try {
+      final request = await HttpClient().headUrl(
+          Uri.parse(url)); // Faz uma solicitação HTTP HEAD para a URL fornecida
+      final response = await request.close(); // Aguarda resposta do servidor
+      return response.statusCode ==
+          200; // Verifica se o status da requisição HTTP é 200, indicando que a imagem é válida
+    } catch (e) {
+      return false;
     }
-    return false;
   }
 
   @override
@@ -98,7 +103,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       onChanged: (text) {
-                        setState(() {});
+                        setState(() {
+                          imageExists = checkImage(
+                              text); // Revalida a imagem ao alterar o texto
+                        });
                       },
                       validator: (String? value) {
                         if (valueValidator(value)) {
@@ -127,30 +135,46 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       ),
                       width: 144,
                       height: 200,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4.0),
-                        child: Image.network(
-                          imageController.text,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stacktrace) {
+                      child: FutureBuilder<bool>(
+                        future: imageExists,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError ||
+                              !snapshot.hasData ||
+                              !snapshot.data!) {
                             return Image.asset(
                               'assets/nophoto.jpg',
                               fit: BoxFit.cover,
                             );
-                          },
-                          fit: BoxFit.cover,
-                        ),
+                          } else {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(4.0),
+                              child: Image.network(
+                                imageController.text,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        TaskDao().save(Task(
-                          nameController.text,
-                          imageController.text,
-                          onDelete: () {},
-                        ));
+                        widget.task == null
+                            ? DatabaseSQFlite.instance.insertTask(TaskModel(
+                                null,
+                                nameController.text,
+                                imageController.text,
+                              ))
+                            : DatabaseSQFlite.instance.updateTask(TaskModel(
+                                widget.task?.id,
+                                nameController.text,
+                                imageController.text,
+                              ));
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(widget.task == null

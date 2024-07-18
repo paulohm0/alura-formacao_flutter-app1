@@ -1,8 +1,9 @@
-import 'package:alura/data/task_dao.dart';
+import 'package:alura/components/task_model.dart';
+import 'package:alura/data/database.dart';
 import 'package:alura/screens/new_task_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../components/task.dart';
+import '../widgets/task_widget.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
@@ -49,10 +50,10 @@ class _InitialScreenState extends State<InitialScreen> {
           opacity: opacidade ? 1 : 0,
           child: Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 70),
-            child: FutureBuilder<List<Task>>(
-                future: TaskDao().findAll(),
+            child: FutureBuilder<List<TaskModel>>(
+                future: DatabaseSQFlite.instance.readAllTasks(),
                 builder: (context, snapshot) {
-                  List<Task>? items = snapshot.data;
+                  List<TaskModel>? items = snapshot.data;
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
                       return Center(
@@ -85,12 +86,15 @@ class _InitialScreenState extends State<InitialScreen> {
                       if (snapshot.hasData && items != null) {
                         if (items.isNotEmpty) {
                           return ListView.builder(
-                              itemCount: items.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final Task tarefa = items[index];
-                                return Task(tarefa.nome, tarefa.imagem,
-                                    onDelete: rebuildList);
-                              });
+                            itemCount: items.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final TaskModel tarefa = items[index];
+                              return TaskWidget(
+                                taskModel: tarefa,
+                                onDelete: rebuildList,
+                              );
+                            },
+                          );
                         }
                         return Center(
                           child: Column(
@@ -118,7 +122,7 @@ class _InitialScreenState extends State<InitialScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (contextNew) => NewTaskScreen(
+                builder: (contextNew) => NewTaskWidget(
                   taskContext: context,
                 ),
               ),

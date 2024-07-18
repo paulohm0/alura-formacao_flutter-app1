@@ -1,24 +1,22 @@
 import 'dart:ui';
 
-import 'package:alura/data/task_dao.dart';
+import 'package:alura/data/database.dart';
 import 'package:flutter/material.dart';
 
+import '../components/task_model.dart';
 import '../screens/new_task_screen.dart';
 
-class Task extends StatefulWidget {
-  final String nome;
-  final String imagem;
+class TaskWidget extends StatefulWidget {
   final VoidCallback onDelete;
+  final TaskModel taskModel;
 
-  Task(this.nome, this.imagem, {required this.onDelete, super.key});
-
-  int nivel = 0;
+  TaskWidget({required this.onDelete, super.key, required this.taskModel});
 
   @override
-  State<Task> createState() => _TaskState();
+  State<TaskWidget> createState() => _TaskWidgetState();
 }
 
-class _TaskState extends State<Task> {
+class _TaskWidgetState extends State<TaskWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -60,7 +58,7 @@ class _TaskState extends State<Task> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4.0),
                         child: Image.network(
-                          widget.imagem,
+                          widget.taskModel.imagem,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -72,7 +70,7 @@ class _TaskState extends State<Task> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.nome,
+                            widget.taskModel.nome,
                             style: const TextStyle(
                                 fontSize: 24, overflow: TextOverflow.ellipsis),
                           ),
@@ -89,16 +87,18 @@ class _TaskState extends State<Task> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => NewTaskScreen(
+                                  builder: (context) => NewTaskWidget(
                                     taskContext: context,
-                                    task: Task(
-                                      widget.nome,
-                                      widget.imagem,
-                                      onDelete: widget.onDelete,
+                                    task: TaskModel(
+                                      widget.taskModel.id,
+                                      widget.taskModel.nome,
+                                      widget.taskModel.imagem,
                                     ),
                                   ),
                                 ),
-                              );
+                              ).then((_) {
+                                widget.onDelete();
+                              });
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -148,8 +148,10 @@ class _TaskState extends State<Task> {
                                               children: [
                                                 ElevatedButton(
                                                   onPressed: () {
-                                                    TaskDao()
-                                                        .delete(widget.nome);
+                                                    DatabaseSQFlite.instance
+                                                        .delete(widget
+                                                                .taskModel.id ??
+                                                            0);
                                                     widget.onDelete();
                                                     Navigator.pop(context);
                                                   },
