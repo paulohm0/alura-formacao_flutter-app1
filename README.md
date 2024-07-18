@@ -1,13 +1,12 @@
 # <p align="center"> Aplicativo de Tarefas
-Este projeto é um aplicativo de gerenciamento de tarefas. Com ele, você pode adicionar novas tarefas, visualizar a lista de tarefas existentes e acompanhar o progresso de cada uma.
+Este projeto é um aplicativo de gerenciamento de tarefas. Com ele você pode adicionar, remover ou editar suas tarefas, podendo adicionar uma foto da internet como imagem da tarefa.
 <p align="center">
 
     ✅ O foco ao criar esse app foi estudar e exercitar: 
-      - construção de tela, 
-      - criação de formulário com validações para os campos,
-      - navegação e rotas,
-      - gerenciamento de estado com Inherited Widget,
-      - tratamento de imagem.
+      - Construção de tela, 
+      - Criação de formulário com validações para os campos,
+      - Navegação e rotas,
+      - Manipulação de uma database com SQFlite, CRUD de tarefas
       
 ## 📱 Imagens
 
