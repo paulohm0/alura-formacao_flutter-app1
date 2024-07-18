@@ -13,4 +13,5 @@ Este projeto é um aplicativo de gerenciamento de tarefas. Com ele você pode ad
 <p float="left">
 <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXdyMmdhdmtlNDc1NjZzOHJoanpxNDNjOGoyODBxbDVnMXlvZmMwZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OFHpveCCywmAZ7wVk9/giphy.gif" alt="Tela do App" width="300"/>
 <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGx0bmhmNG03cDFkcWs4dWJvbjFvNG15dTM2OHhnNDg1dXJuNnpndyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6jtxXsMGVFy7F8tM7o/giphy.gif" alt="Tela do App" width="300"/>
+<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWlnM3d0NTYwbmk2cG5ndmRwYTBkMW43MHFuOXNxeG1yMzd3ejBqMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/U6gwgIQ9u1cT6w1THA/giphy.gif" alt="Tela do App" width="300"/>
 </p>
